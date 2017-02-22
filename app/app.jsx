@@ -1,11 +1,14 @@
-import React from "react"; // eslint-disable-line no-unused-vars
-import ReactDOM from "react-dom";
+import React from 'react'; // eslint-disable-line no-unused-vars
+import ReactDOM from 'react-dom';
+
+import  KlineViewComponent  from './components/klineView';
+
 function App ()  {
 	return (
-    <div className="container">Hello oo</div>);
+    <KlineViewComponent />);
 }
 
-const app = document.createElement("div");
+const app = document.createElement('div');
 document.body.appendChild(app);
 ReactDOM.render(<App/>, app);
 
