@@ -2,21 +2,35 @@ import React from 'react';
 import ReactEcharts from 'echarts-for-react';
 
 import { datas } from './datas';
-import { option }  from './option';
 
 const KlineViewComponent = React.createClass({
 	propTypes: {
     
 	},
 	timeTicket: null,
+	count:0,
 	times:0,
 	getInitialState : function(){
 		return {option:this.getOption()};
 	},
 	fetchData:function(){
 		let option = this.state.option;
+		if(this.times ===0){
+			clearInterval(this.timeTicket);
+		}
+		let data = datas[this.count-this.times];
+		if(!data[0]){
+			this.times--;
+			return;
+		}
+		option.xAxis.data.push(data[0]);
+		option.series[0].data.push([+data[1],+data[2],+data[5],+data[6]]);
+		this.setState({option:option});
+		this.times--;	
 	},
 	componentDidMount : function(){
+		this.times = datas.length;
+		this.count = datas.length;
 		if (this.timeTicket) {
 			clearInterval(this.timeTicket);
 		}
@@ -28,7 +42,6 @@ const KlineViewComponent = React.createClass({
 		}
 	},
 	getOption:function(){
-
 		const option = {
 			backgroundColor: '#21202D',
 			legend: {
@@ -40,7 +53,7 @@ const KlineViewComponent = React.createClass({
 			},
 			xAxis: {
 				type: 'category',
-				data: dates,
+				data: [],
 				axisLine: {
 					lineStyle: {
 						color: '#8392A5'
@@ -58,11 +71,11 @@ const KlineViewComponent = React.createClass({
 					show: false
 				}
 			},
-			animation: false,
+			animation: true,
 			series: [{
 				type: 'candlestick',
 				name: '日K',
-				data: data,
+				data: [],
 				itemStyle: {
 					normal: {
 						color: '#FD1050',
@@ -71,51 +84,51 @@ const KlineViewComponent = React.createClass({
 						borderColor0: '#0CF49B'
 					}
 				}
-			}, {
-				name: 'MA5',
-				type: 'line',
-				data: calculateMA(5, data),
-				smooth: true,
-				showSymbol: false,
-				lineStyle: {
-					normal: {
-						width: 1
-					}
-				}
-			}, {
-				name: 'MA10',
-				type: 'line',
-				data: calculateMA(10, data),
-				smooth: true,
-				showSymbol: false,
-				lineStyle: {
-					normal: {
-						width: 1
-					}
-				}
-			}, {
-				name: 'MA20',
-				type: 'line',
-				data: calculateMA(20, data),
-				smooth: true,
-				showSymbol: false,
-				lineStyle: {
-					normal: {
-						width: 1
-					}
-				}
-			}, {
-				name: 'MA30',
-				type: 'line',
-				data: calculateMA(30, data),
-				smooth: true,
-				showSymbol: false,
-				lineStyle: {
-					normal: {
-						width: 1
-					}
-				}
-			}]
+			}/*, {*/
+				//name: 'MA5',
+				//type: 'line',
+				//data: calculateMA(5, data),
+				//smooth: true,
+				//showSymbol: false,
+				//lineStyle: {
+					//normal: {
+						//width: 1
+					//}
+				//}
+			//}, {
+				//name: 'MA10',
+				//type: 'line',
+				//data: calculateMA(10, data),
+				//smooth: true,
+				//showSymbol: false,
+				//lineStyle: {
+					//normal: {
+						//width: 1
+					//}
+				//}
+			//}, {
+				//name: 'MA20',
+				//type: 'line',
+				//data: calculateMA(20, data),
+				//smooth: true,
+				//showSymbol: false,
+				//lineStyle: {
+					//normal: {
+						//width: 1
+					//}
+				//}
+			//}, {
+				//name: 'MA30',
+				//type: 'line',
+				//data: calculateMA(30, data),
+				//smooth: true,
+				//showSymbol: false,
+				//lineStyle: {
+					//normal: {
+						//width: 1
+					//}
+				/*}*/
+			]
 		};
 		return option;
 	},
