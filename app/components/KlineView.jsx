@@ -19,12 +19,17 @@ const KlineViewComponent = React.createClass({
 			clearInterval(this.timeTicket);
 		}
 		let data = this.datas[this.count-this.times];
+		let date = data[0]; 
+		let priceInfo = [+data[1],+data[2],+data[5],+data[6]];
 		if(!data[0]){
 			this.times--;
 			return;
 		}
-		option.xAxis.data.push(data[0]);
-		option.series[0].data.push([+data[1],+data[2],+data[5],+data[6]]);
+		option.xAxis.data.push(date);
+		option.series[0].data.push(priceInfo);
+		option.series[1].data = this.calculateMa(5,option.series[0].data);
+		option.series[2].data = this.calculateMa(10,option.series[0].data);
+		option.series[3].data = this.calculateMa(20,option.series[0].data);
 		this.setState({option:option});
 		this.times--;	
 	},
@@ -40,6 +45,21 @@ const KlineViewComponent = React.createClass({
 		if (this.timeTicket) {
 			clearInterval(this.timeTicket);
 		}
+	},
+	calculateMa :function(dayCount,data){
+		var result = [];
+		for (var i=0,len=data.length;i<len;i++){
+			if(i<dayCount){
+				result.push('-');
+				continue;
+			}
+			var sum = 0;
+			for (var j=0;j<dayCount;j++){
+				sum+=data[i-j][1];
+			}
+			result.push(sum/dayCount);
+		}
+		return result;
 	},
 	getOption:function(){
 		const option = {
@@ -84,50 +104,40 @@ const KlineViewComponent = React.createClass({
 						borderColor0: '#0CF49B'
 					}
 				}
-			}/*, {*/
-				//name: 'MA5',
-				//type: 'line',
-				//data: calculateMA(5, data),
-				//smooth: true,
-				//showSymbol: false,
-				//lineStyle: {
-					//normal: {
-						//width: 1
-					//}
-				//}
-			//}, {
-				//name: 'MA10',
-				//type: 'line',
-				//data: calculateMA(10, data),
-				//smooth: true,
-				//showSymbol: false,
-				//lineStyle: {
-					//normal: {
-						//width: 1
-					//}
-				//}
-			//}, {
-				//name: 'MA20',
-				//type: 'line',
-				//data: calculateMA(20, data),
-				//smooth: true,
-				//showSymbol: false,
-				//lineStyle: {
-					//normal: {
-						//width: 1
-					//}
-				//}
-			//}, {
-				//name: 'MA30',
-				//type: 'line',
-				//data: calculateMA(30, data),
-				//smooth: true,
-				//showSymbol: false,
-				//lineStyle: {
-					//normal: {
-						//width: 1
-					//}
-				/*}*/
+			}, {
+				name: 'MA5',
+				type: 'line',
+				data: [],
+				smooth: true,
+				showSymbol: false,
+				lineStyle: {
+					normal: {
+						width: 1
+					}
+				}
+			}, {
+				name: 'MA10',
+				type: 'line',
+				data: [],
+				smooth: true,
+				showSymbol: false,
+				lineStyle: {
+					normal: {
+						width: 1
+					}
+				}
+			}, {
+				name: 'MA20',
+				type: 'line',
+				data: [],
+				smooth: true,
+				showSymbol: false,
+				lineStyle: {
+					normal: {
+						width: 1
+					}
+				}
+			}
 			]
 		};
 		return option;
