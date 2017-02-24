@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactEcharts from 'echarts-for-react';
 
-import { datas } from './datas';
-
 const KlineViewComponent = React.createClass({
 	propTypes: {
     
@@ -10,7 +8,9 @@ const KlineViewComponent = React.createClass({
 	timeTicket: null,
 	count:0,
 	times:0,
+	datas:{},
 	getInitialState : function(){
+		this.datas = this.props.datas;
 		return {option:this.getOption()};
 	},
 	fetchData:function(){
@@ -18,7 +18,7 @@ const KlineViewComponent = React.createClass({
 		if(this.times ===0){
 			clearInterval(this.timeTicket);
 		}
-		let data = datas[this.count-this.times];
+		let data = this.datas[this.count-this.times];
 		if(!data[0]){
 			this.times--;
 			return;
@@ -29,8 +29,8 @@ const KlineViewComponent = React.createClass({
 		this.times--;	
 	},
 	componentDidMount : function(){
-		this.times = datas.length;
-		this.count = datas.length;
+		this.times = this.datas.length;
+		this.count = this.datas.length;
 		if (this.timeTicket) {
 			clearInterval(this.timeTicket);
 		}
