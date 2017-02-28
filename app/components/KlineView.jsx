@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactEcharts from 'echarts-for-react';
+import { connect } from 'react-redux';
+import { add } from '../actions/index';
 
 const KlineViewComponent = React.createClass({
 	propTypes: {
@@ -152,8 +154,25 @@ const KlineViewComponent = React.createClass({
 			</div>
 		);
 	}
-
-
 });
 
-export default KlineViewComponent;
+// Map Redux state to component props
+function mapStateToProps(state) {
+	return {
+		currentData: state.currentData,
+		currentDate: state.currentDate
+	};
+}
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch) {
+	return {
+		onIncreaseClick: () => dispatch(add)
+	};
+}
+
+const App = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(KlineViewComponent);
+export default App;
