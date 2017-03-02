@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactEcharts from 'echarts-for-react';
 import { connect } from 'react-redux';
-import { add } from '../actions/index';
+import { add,addBuySign,addSellSign } from '../actions/index';
 
 const KlineViewComponent = React.createClass({
 	propTypes: {
@@ -14,6 +14,37 @@ const KlineViewComponent = React.createClass({
 	getInitialState : function(){
 		this.datas = this.props.datas;
 		return {option:this.getOption()};
+	},
+	componentWillReceiveProps : function(nextProps){
+		nextProps.tradeInfo.buyTrade.forEach((trade)=>{
+			if(!trade.isMarkPoint){
+				let markData = {
+					name : 'BUY',
+					coord : [trade.date,trade.highest],
+					value : trade.price,
+					itemStyle : {
+						normal: {color: 'rgb(255,46,46)'}
+					}
+				};
+				this.state.option.series[0].markPoint.data.push(markData);
+				this.props.addBuySign(trade);
+			}
+		});	
+		
+		nextProps.tradeInfo.sellTrade.forEach((trade)=>{
+			if(!trade.isMarkPoint){
+				let markData = {
+					name : 'SELL',
+					coord : [trade.date,trade.highest],
+					value : trade.price,
+					itemStyle : {
+						normal: {color: 'rgb(61,61,61)'}
+					}
+				};
+				this.state.option.series[0].markPoint.data.push(markData);
+				this.props.addSellSign(trade);
+			}
+		});	
 	},
 	fetchData:function(){
 		let option = this.state.option;
@@ -33,6 +64,7 @@ const KlineViewComponent = React.createClass({
 		option.series[2].data = this.calculateMa(10,option.series[0].data);
 		option.series[3].data = this.calculateMa(20,option.series[0].data);
 		this.setState({option:option});
+		this.props.addCurrentData(data,date);
 		this.times--;	
 	},
 	componentDidMount : function(){
@@ -98,6 +130,17 @@ const KlineViewComponent = React.createClass({
 				type: 'candlestick',
 				name: '日K',
 				data: [],
+				markPoint : {
+					label : {
+						normal : {
+							formatter: function (param){
+								return param != null ? Math.round(param.value) : '';
+							}
+						}
+					},
+					data : [
+					]
+				},
 				itemStyle: {
 					normal: {
 						color: '#FD1050',
@@ -159,15 +202,18 @@ const KlineViewComponent = React.createClass({
 // Map Redux state to component props
 function mapStateToProps(state) {
 	return {
-		currentData: state.currentData,
-		currentDate: state.currentDate
+		currentData: state.trade.currentData,
+		currentDate: state.trade.currentDate,
+		tradeInfo : state.trade.tradeInfo
 	};
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
 	return {
-		onIncreaseClick: () => dispatch(add)
+		addCurrentData: (data,date) => dispatch(add(data,date)),
+		addBuySign : (tradeInfo) => dispatch(addBuySign(tradeInfo)),
+		addSellSign : (tradeInfo) => dispatch(addSellSign(tradeInfo))
 	};
 }
 

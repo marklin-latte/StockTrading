@@ -1,3 +1,5 @@
+//require('../scss/main.scss');
+import '../scss/main.scss';
 import React from 'react'; // eslint-disable-line no-unused-vars
 import { render } from 'react-dom';
 import { createStore } from 'redux';

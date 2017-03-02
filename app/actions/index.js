@@ -1,4 +1,4 @@
-import Types from '../types';
+import { Types } from '../types';
 
 export const add = (data,date) => {
 	return {
@@ -8,30 +8,30 @@ export const add = (data,date) => {
 	};
 };
 
-export const buy = (tradeObjInfo) => {
+export const buy = (tradeInfo) => {
 	return {
 		type : Types.BUY,
-		tradeObjInfo
+		tradeInfo
 	};
 };
 
-export const sell = (tradeObjInfo) => {
+export const sell = (tradeInfo) => {
 	return {
 		type : Types.SELL,
-		tradeObjInfo
+		tradeInfo
 	};
 };
 
 export const addBuySign = (tradeObjInfo) => {
 	return {
-		type: Types.Add_BUY_SIGN,
+		type: Types.ADD_BUY_SIGN,
 		tradeObjInfo
 	};
 };
 
 export const addSellSign = (tradeObjInfo) => {
 	return {
-		type: Types.Add_SELL_SIGN,
+		type: Types.ADD_SELL_SIGN,
 		tradeObjInfo
 	};
 };
