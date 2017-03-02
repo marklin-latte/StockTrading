@@ -152,14 +152,14 @@ input {
 /* ----- Components -----*/
 .tradeInfo__Assets {
   position: absolute;
-  top: 10px;
+  top: 26px;
   right: 200px;
   color: #fc0;
   font-size: 1.2em; }
 
 .tradeInfo__Position {
   position: absolute;
-  top: 10px;
+  top: 26px;
   right: 300px;
   color: #fc0;
   font-size: 1.2em; }
@@ -179,5 +179,8 @@ input {
   height: 200px;
   width: 50%;
   border: none; }
+
+.Chart__main {
+  padding: 20px; }
 
 /* ----- /Components -----*/
