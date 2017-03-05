@@ -192,7 +192,7 @@ const KlineViewComponent = React.createClass({
 			<div className="Chart">
 				<ReactEcharts
 					option= {this.state.option} 
-            style={{height: '550px', width: '100%'}} 
+            style={{height: '70vh', width: '100%'}} 
             className="Chart__main" />
 			</div>
 		);
